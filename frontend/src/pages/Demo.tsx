@@ -248,8 +248,8 @@ export const Demo: React.FC<DemoProps> = ({
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div style={{ fontSize: "0.78rem", color: "var(--text-dim)", textAlign: "right" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+          <div style={{ fontSize: "0.78rem", color: "var(--text-dim)", textAlign: "left" }}>
             <div>Session ID: <code style={{ color: "var(--accent-cyan)" }}>{demoStatus?.session_id || "initializing..."}</code></div>
             <div>Updated: {lastPollTime.toLocaleTimeString()}</div>
           </div>
@@ -312,13 +312,13 @@ export const Demo: React.FC<DemoProps> = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
           gap: "20px",
         }}
       >
         {/* Left: Injection Controls */}
-        <div className="card" style={{ padding: "24px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
+        <div className="card" style={{ padding: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px", flexWrap: "wrap", gap: "8px" }}>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
               <Zap size={18} color="var(--accent-cyan)" />
               Simulated Leak Injector
@@ -354,7 +354,7 @@ export const Demo: React.FC<DemoProps> = ({
               <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600, display: "block", marginBottom: "6px" }}>
                 Anomaly Flow Profile & Detection Method
               </label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "10px" }}>
                 <button
                   type="button"
                   onClick={() => setLeakType("slow_leak")}
@@ -427,7 +427,7 @@ export const Demo: React.FC<DemoProps> = ({
                       type="button"
                       onClick={() => setSeverity(sev)}
                       style={{
-                        padding: "8px 10px",
+                        padding: "8px 6px",
                         borderRadius: "var(--radius-sm)",
                         border: `1px solid ${severity === sev ? "var(--accent-cyan)" : "var(--border-subtle)"}`,
                         background: severity === sev ? "rgba(6, 182, 212, 0.15)" : "var(--bg-card)",
@@ -451,12 +451,12 @@ export const Demo: React.FC<DemoProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: "flex", gap: "10px", marginTop: "8px" }}>
+            <div style={{ display: "flex", gap: "10px", marginTop: "8px", flexWrap: "wrap" }}>
               <button
                 className="btn btn-primary"
                 onClick={handleInject}
                 disabled={isInjecting || (demoStatus?.status === "detected" && !demoStatus?.alert_resolved)}
-                style={{ flex: 2, padding: "12px", justifyContent: "center" }}
+                style={{ flex: "1 1 180px", padding: "12px", justifyContent: "center" }}
               >
                 {isInjecting ? (
                   <>
@@ -474,7 +474,7 @@ export const Demo: React.FC<DemoProps> = ({
                 className="btn btn-secondary"
                 onClick={handleReset}
                 disabled={isResetting || demoStatus?.status === "idle"}
-                style={{ flex: 1, padding: "12px", justifyContent: "center" }}
+                style={{ flex: "1 1 120px", padding: "12px", justifyContent: "center" }}
                 title="Rollback injected demo readings and alerts"
               >
                 {isResetting ? "Cleaning..." : (
@@ -496,7 +496,7 @@ export const Demo: React.FC<DemoProps> = ({
         </div>
 
         {/* Right: Active Event & Impact Summary */}
-        <div className="card" style={{ padding: "24px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div className="card" style={{ padding: "20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
@@ -697,8 +697,8 @@ export const Demo: React.FC<DemoProps> = ({
 
       {/* 4. TELEMETRY GRAPH FOR SELECTED ZONE */}
       {demoStatus?.telemetry_points && demoStatus.telemetry_points.length > 0 && (
-        <div className="card" style={{ padding: "24px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+        <div className="card" style={{ padding: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
             <div>
               <h3 style={{ fontSize: "1rem", fontWeight: 700, margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
                 <Activity size={18} color="var(--accent-cyan)" />
@@ -708,7 +708,7 @@ export const Demo: React.FC<DemoProps> = ({
                 Visualizing baseline vs. simulated leak consumption points in real time
               </p>
             </div>
-            <div style={{ display: "flex", gap: "12px", fontSize: "0.75rem" }}>
+            <div style={{ display: "flex", gap: "12px", fontSize: "0.75rem", flexWrap: "wrap" }}>
               <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <span style={{ width: "10px", height: "10px", borderRadius: "2px", background: "var(--accent-cyan)" }} />
                 Actual Reading (L)
@@ -720,7 +720,7 @@ export const Demo: React.FC<DemoProps> = ({
             </div>
           </div>
 
-          <div style={{ width: "100%", height: "240px" }}>
+          <div className="chart-container" style={{ width: "100%", height: "240px", minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={demoStatus.telemetry_points.map((p) => ({
@@ -772,7 +772,7 @@ export const Demo: React.FC<DemoProps> = ({
       )}
 
       {/* 5. GUIDED 2-3 MINUTE PRESENTATION WALKTHROUGH */}
-      <div className="card" style={{ padding: "20px 24px" }}>
+      <div className="card" style={{ padding: "20px" }}>
         <div
           style={{
             display: "flex",
@@ -800,7 +800,7 @@ export const Demo: React.FC<DemoProps> = ({
               paddingTop: "16px",
               borderTop: "1px solid var(--border-subtle)",
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
               gap: "16px",
             }}
           >

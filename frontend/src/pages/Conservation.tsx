@@ -75,7 +75,9 @@ export const Conservation: React.FC<ConservationProps> = ({
               display: "flex",
               flexDirection: "column",
               gap: "12px",
-              minWidth: "260px",
+              width: "100%",
+              maxWidth: "320px",
+              boxSizing: "border-box",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.75rem", color: "var(--accent-cyan)", fontWeight: 700, textTransform: "uppercase" }}>
@@ -116,7 +118,7 @@ export const Conservation: React.FC<ConservationProps> = ({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))",
             gap: "16px",
             marginTop: "24px",
             paddingTop: "20px",
@@ -239,7 +241,7 @@ export const Conservation: React.FC<ConservationProps> = ({
               }}
             >
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                   <span className={`badge ${rec.priority === "critical" || rec.priority === "high" ? "badge-danger" : rec.priority === "medium" ? "badge-warning" : "badge-info"}`}>
                     {rec.priority} Priority
                   </span>
@@ -263,7 +265,7 @@ export const Conservation: React.FC<ConservationProps> = ({
 
       {/* 4. WATER BUDGET UTILIZATION SUMMARY TABLE */}
       <div className="card">
-        <div className="card-header">
+        <div className="card-header" style={{ flexWrap: "wrap", gap: "12px" }}>
           <div>
             <h3 className="section-title">
               <Layers size={18} color="var(--accent-cyan)" />

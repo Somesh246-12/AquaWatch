@@ -85,7 +85,7 @@ export const Alerts: React.FC<AlertsProps> = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
           gap: "16px",
         }}
       >
@@ -161,10 +161,10 @@ export const Alerts: React.FC<AlertsProps> = ({
           gap: "14px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {/* Search bar */}
-          <div style={{ display: "flex", alignItems: "center", flex: 1, minWidth: "220px", position: "relative" }}>
-            <Search size={16} color="var(--text-dim)" style={{ position: "absolute", left: "12px" }} />
+          <div style={{ display: "flex", alignItems: "center", width: "100%", position: "relative" }}>
+            <Search size={16} color="var(--text-dim)" style={{ position: "absolute", left: "12px", pointerEvents: "none" }} />
             <input
               type="text"
               placeholder="Search diagnostic messages, zones, anomaly types..."
@@ -175,54 +175,61 @@ export const Alerts: React.FC<AlertsProps> = ({
             />
           </div>
 
-          {/* Zone filter */}
-          <select
-            value={selectedZoneId}
-            onChange={(e) => setSelectedZoneId(e.target.value)}
-            className="select"
-          >
-            <option value="all">All Zones</option>
-            {zones.map((z) => (
-              <option key={z.id} value={String(z.id)}>
-                {z.name}
-              </option>
-            ))}
-          </select>
+          {/* Filter Dropdowns Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 150px), 1fr))", gap: "10px" }}>
+            {/* Zone filter */}
+            <select
+              value={selectedZoneId}
+              onChange={(e) => setSelectedZoneId(e.target.value)}
+              className="select"
+              style={{ width: "100%" }}
+            >
+              <option value="all">All Zones</option>
+              {zones.map((z) => (
+                <option key={z.id} value={String(z.id)}>
+                  {z.name}
+                </option>
+              ))}
+            </select>
 
-          {/* Severity filter */}
-          <select
-            value={selectedSeverity}
-            onChange={(e) => setSelectedSeverity(e.target.value)}
-            className="select"
-          >
-            <option value="all">All Severities</option>
-            <option value="high">High Severity</option>
-            <option value="medium">Medium Severity</option>
-            <option value="low">Low Severity</option>
-          </select>
+            {/* Severity filter */}
+            <select
+              value={selectedSeverity}
+              onChange={(e) => setSelectedSeverity(e.target.value)}
+              className="select"
+              style={{ width: "100%" }}
+            >
+              <option value="all">All Severities</option>
+              <option value="high">High Severity</option>
+              <option value="medium">Medium Severity</option>
+              <option value="low">Low Severity</option>
+            </select>
 
-          {/* Alert Type filter */}
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className="select"
-          >
-            <option value="all">All Alert Types</option>
-            <option value="leak">Leak (Rule-Based)</option>
-            <option value="spike">Spike (Z-Score)</option>
-            <option value="abnormal_usage">Abnormal (Isolation Forest)</option>
-          </select>
+            {/* Alert Type filter */}
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="select"
+              style={{ width: "100%" }}
+            >
+              <option value="all">All Alert Types</option>
+              <option value="leak">Leak (Rule-Based)</option>
+              <option value="spike">Spike (Z-Score)</option>
+              <option value="abnormal_usage">Abnormal (Isolation Forest)</option>
+            </select>
 
-          {/* Status filter */}
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="select"
-          >
-            <option value="unresolved">Unresolved Only</option>
-            <option value="resolved">Resolved Only</option>
-            <option value="all">All Statuses</option>
-          </select>
+            {/* Status filter */}
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="select"
+              style={{ width: "100%" }}
+            >
+              <option value="unresolved">Unresolved Only</option>
+              <option value="resolved">Resolved Only</option>
+              <option value="all">All Statuses</option>
+            </select>
+          </div>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--text-dim)" }}>
@@ -245,9 +252,10 @@ export const Alerts: React.FC<AlertsProps> = ({
         </div>
       </div>
 
-      {/* 3. ALERTS TABLE */}
+      {/* 3. ALERTS TABLE & MOBILE CARDS */}
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-        <div className="table-container">
+        {/* Desktop Table View (>= 769px) */}
+        <div className="alerts-desktop-table table-container">
           <table className="table">
             <thead>
               <tr>
@@ -323,6 +331,84 @@ export const Alerts: React.FC<AlertsProps> = ({
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Alert Cards View (<= 768px) */}
+        <div className="alerts-mobile-cards">
+          {filteredAlerts.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "32px 16px", color: "var(--text-muted)" }}>
+              <CheckCircle size={32} color="var(--color-success)" style={{ margin: "0 auto 8px" }} />
+              <p style={{ fontWeight: 600 }}>No alerts matching the selected criteria</p>
+              <p style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>Adjust filters or execute the detection engine.</p>
+            </div>
+          ) : (
+            filteredAlerts.map((alert) => {
+              const zone = zones.find((z) => z.id === alert.zone_id);
+              return (
+                <div
+                  key={alert.id}
+                  onClick={() => setActiveModalAlert(alert)}
+                  style={{
+                    padding: "14px",
+                    background: "rgba(10, 20, 44, 0.6)",
+                    border: "1px solid var(--border-subtle)",
+                    borderRadius: "var(--radius-md)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "6px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span className={`badge badge-${alert.severity === "high" ? "danger" : alert.severity === "medium" ? "warning" : "info"}`}>
+                        {alert.severity}
+                      </span>
+                      <span style={{ fontWeight: 700, fontSize: "0.875rem" }}>
+                        {zone?.name || `Zone ${alert.zone_id}`}
+                      </span>
+                    </div>
+                    <span className={`badge ${alert.resolved ? "badge-normal" : "badge-danger"}`}>
+                      {alert.resolved ? "Resolved" : "Active"}
+                    </span>
+                  </div>
+
+                  <p style={{ fontSize: "0.8125rem", color: "var(--text-main)", margin: 0, lineHeight: 1.4 }}>
+                    {alert.message}
+                  </p>
+
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", paddingTop: "6px", borderTop: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span className={`badge ${alert.alert_type === "leak" ? "badge-info" : alert.alert_type === "spike" ? "badge-warning" : "badge-purple"}`} style={{ fontSize: "0.6875rem" }}>
+                        {alert.alert_type.replace("_", " ")}
+                      </span>
+                      <span style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>
+                        {new Date(alert.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", month: "short", day: "numeric" })}
+                      </span>
+                    </div>
+
+                    {!alert.resolved ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onResolveAlert(alert.id);
+                        }}
+                        disabled={isResolving}
+                        className="btn btn-secondary btn-sm"
+                        style={{ fontSize: "0.75rem", padding: "5px 12px" }}
+                      >
+                        Resolve Alert
+                      </button>
+                    ) : (
+                      <span style={{ fontSize: "0.75rem", color: "var(--color-success)", fontWeight: 600 }}>
+                        Fixed
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
 
       {/* 4. ALERT DETAIL MODAL DIALOG */}
@@ -338,7 +424,7 @@ export const Alerts: React.FC<AlertsProps> = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "20px",
+            padding: "16px",
           }}
         >
           <div
@@ -347,6 +433,8 @@ export const Alerts: React.FC<AlertsProps> = ({
             style={{
               maxWidth: "540px",
               width: "100%",
+              maxHeight: "90vh",
+              overflowY: "auto",
               background: "#0c1833",
               border: "1px solid var(--accent-cyan)",
               boxShadow: "0 20px 40px rgba(0, 0, 0, 0.8)",

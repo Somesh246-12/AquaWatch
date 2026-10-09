@@ -79,10 +79,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.6)",
+            background: "rgba(0, 0, 0, 0.7)",
             backdropFilter: "blur(4px)",
-            zIndex: 35,
+            zIndex: 45,
           }}
+          aria-hidden="true"
         />
       )}
 
@@ -90,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Brand Header */}
         <div
           style={{
-            padding: "24px 20px",
+            padding: "20px 18px",
             borderBottom: "1px solid var(--border-subtle)",
             display: "flex",
             alignItems: "center",
@@ -108,6 +109,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 alignItems: "center",
                 justifyContent: "center",
                 boxShadow: "0 0 20px rgba(6, 182, 212, 0.4)",
+                flexShrink: 0,
               }}
             >
               <Droplets size={22} color="#050c1e" strokeWidth={2.5} />
@@ -144,11 +146,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               onClick={onCloseMobile}
               style={{
-                background: "transparent",
+                background: "rgba(255, 255, 255, 0.08)",
                 border: "none",
-                color: "var(--text-muted)",
+                borderRadius: "var(--radius-sm)",
+                color: "var(--text-main)",
                 cursor: "pointer",
+                padding: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "36px",
+                height: "36px",
               }}
+              aria-label="Close navigation"
             >
               <X size={20} />
             </button>

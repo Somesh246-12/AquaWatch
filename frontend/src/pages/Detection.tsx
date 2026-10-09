@@ -66,7 +66,9 @@ export const Detection: React.FC<DetectionProps> = ({
               display: "flex",
               flexDirection: "column",
               gap: "10px",
-              minWidth: "260px",
+              width: "100%",
+              maxWidth: "300px",
+              boxSizing: "border-box",
             }}
           >
             <div style={{ fontSize: "0.75rem", color: "var(--text-dim)", textTransform: "uppercase", fontWeight: 700 }}>
@@ -89,7 +91,7 @@ export const Detection: React.FC<DetectionProps> = ({
               onClick={handleExecute}
               disabled={isRunning}
               className="btn btn-primary btn-sm"
-              style={{ marginTop: "6px" }}
+              style={{ marginTop: "6px", width: "100%" }}
             >
               <Zap size={14} />
               <span>{isRunning ? "Executing Models..." : "Run Detection Pipeline"}</span>
@@ -115,7 +117,7 @@ export const Detection: React.FC<DetectionProps> = ({
       </div>
 
       {/* 2. THREE DETECTOR SPECIFICATIONS */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "20px" }}>
         {/* Model 1: Rule-Based */}
         <div className="card">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
@@ -165,7 +167,7 @@ export const Detection: React.FC<DetectionProps> = ({
       {/* 3. BENCHMARK EVALUATION TABLE */}
       {lastRunResult && (
         <div className="card">
-          <div className="card-header">
+          <div className="card-header" style={{ flexWrap: "wrap", gap: "12px" }}>
             <div>
               <h3 className="section-title">
                 <ShieldCheck size={18} color="var(--color-success)" />
@@ -173,7 +175,7 @@ export const Detection: React.FC<DetectionProps> = ({
               </h3>
               <p className="page-subtitle">Event-level bipartite matching against 10 synthetic ground-truth anomaly events</p>
             </div>
-            <div style={{ display: "flex", gap: "10px", fontSize: "0.8125rem" }}>
+            <div style={{ display: "flex", gap: "8px", fontSize: "0.8125rem", flexWrap: "wrap" }}>
               <span className="badge badge-neutral">Candidates: {lastRunResult.candidate_detections}</span>
               <span className="badge badge-normal">Created: {lastRunResult.alerts_created}</span>
               <span className="badge badge-warning">Skipped Duplicates: {lastRunResult.alerts_existing}</span>

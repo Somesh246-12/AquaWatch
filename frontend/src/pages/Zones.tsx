@@ -81,19 +81,21 @@ export const Zones: React.FC<ZonesProps> = ({
           alignItems: "center",
           justifyContent: "space-between",
           flexWrap: "wrap",
-          gap: "16px",
+          gap: "14px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Filter size={18} color="var(--accent-cyan)" />
-          <span style={{ fontSize: "0.875rem", fontWeight: 600 }}>Filter Status:</span>
-          <div style={{ display: "flex", gap: "6px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Filter size={18} color="var(--accent-cyan)" />
+            <span style={{ fontSize: "0.875rem", fontWeight: 600 }}>Filter Status:</span>
+          </div>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             {["all", "normal", "warning", "exceeded"].map((status) => (
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
                 className={`btn btn-sm ${statusFilter === status ? "btn-primary" : "btn-secondary"}`}
-                style={{ textTransform: "capitalize" }}
+                style={{ textTransform: "capitalize", padding: "4px 10px" }}
               >
                 {status}
               </button>
@@ -101,7 +103,7 @@ export const Zones: React.FC<ZonesProps> = ({
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
           <Calendar size={16} color="var(--accent-cyan)" />
           <span style={{ fontSize: "0.875rem", color: "var(--text-muted)" }}>Inspection Date:</span>
           <input
@@ -109,7 +111,7 @@ export const Zones: React.FC<ZonesProps> = ({
             value={selectedDate}
             onChange={(e) => onSelectDate(e.target.value)}
             className="input"
-            style={{ padding: "4px 10px", fontSize: "0.8125rem" }}
+            style={{ padding: "4px 8px", fontSize: "0.8125rem", maxWidth: "140px" }}
           />
         </div>
       </div>
@@ -118,8 +120,8 @@ export const Zones: React.FC<ZonesProps> = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          gap: "18px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))",
+          gap: "16px",
         }}
       >
         {filteredZoneBudgets.map((zb) => {
@@ -133,7 +135,7 @@ export const Zones: React.FC<ZonesProps> = ({
                 cursor: "pointer",
                 border: isSelected ? "2px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
                 background: isSelected ? "rgba(14, 30, 64, 0.9)" : "var(--bg-card)",
-                padding: "20px",
+                padding: "18px",
                 display: "flex",
                 flexDirection: "column",
                 gap: "14px",
@@ -197,7 +199,7 @@ export const Zones: React.FC<ZonesProps> = ({
       {/* Selected Zone Deep Dive Panel */}
       {selectedZone && (
         <div className="card">
-          <div className="card-header">
+          <div className="card-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
             <div>
               <h2 className="section-title">
                 <Droplet size={20} color="var(--accent-cyan)" />
@@ -209,7 +211,7 @@ export const Zones: React.FC<ZonesProps> = ({
             </div>
 
             {selectedZoneBudget && (
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                 <span className={`badge badge-${selectedZoneBudget.status}`} style={{ fontSize: "0.8125rem" }}>
                   {selectedZoneBudget.status} status ({selectedZoneBudget.consumed_percent}% budget used)
                 </span>
@@ -224,7 +226,7 @@ export const Zones: React.FC<ZonesProps> = ({
                 <Clock size={16} color="var(--accent-cyan)" />
                 Recent Hourly Consumption (24 Hours)
               </div>
-              <div style={{ height: "240px", width: "100%" }}>
+              <div className="chart-container" style={{ height: "240px", width: "100%", minWidth: 0 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={zoneHourlyData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                     <defs>

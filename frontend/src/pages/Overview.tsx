@@ -240,7 +240,7 @@ export const Overview: React.FC<OverviewProps> = ({
             </div>
           </div>
 
-          <div style={{ height: "300px", width: "100%" }}>
+          <div className="chart-container" style={{ height: "280px", width: "100%", minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               {trendView === "daily" ? (
                 <AreaChart data={dailyChartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
@@ -307,7 +307,7 @@ export const Overview: React.FC<OverviewProps> = ({
             </button>
           </div>
 
-          <div style={{ height: "300px", width: "100%" }}>
+          <div className="chart-container" style={{ height: "280px", width: "100%", minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={zoneBarData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -352,14 +352,14 @@ export const Overview: React.FC<OverviewProps> = ({
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {budgets?.zones?.map((zb) => (
               <div key={zb.zone_id} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.875rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "6px", fontSize: "0.875rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", minWidth: 0 }}>
                     <span style={{ fontWeight: 600 }}>{zb.zone_name}</span>
                     <span style={{ fontSize: "0.75rem", color: "var(--text-dim)" }}>({zb.zone_type})</span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
                     <span style={{ fontWeight: 600 }}>{zb.actual_consumption_litres.toLocaleString()} L</span>
-                    <span style={{ color: "var(--text-dim)" }}>/ {zb.daily_budget_litres.toLocaleString()} L</span>
+                    <span style={{ color: "var(--text-dim)", fontSize: "0.8125rem" }}>/ {zb.daily_budget_litres.toLocaleString()} L</span>
                     <span className={`badge badge-${zb.status}`}>{zb.status}</span>
                   </div>
                 </div>
@@ -419,15 +419,16 @@ export const Overview: React.FC<OverviewProps> = ({
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      gap: "12px",
+                      flexWrap: "wrap",
+                      gap: "10px",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                      <span className={`badge badge-${alert.severity === "high" ? "danger" : alert.severity === "medium" ? "warning" : "info"}`}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0, flex: 1 }}>
+                      <span className={`badge badge-${alert.severity === "high" ? "danger" : alert.severity === "medium" ? "warning" : "info"}`} style={{ flexShrink: 0 }}>
                         {alert.severity}
                       </span>
-                      <div>
-                        <div style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontSize: "0.8125rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                           {zone?.name || `Zone ${alert.zone_id}`} •{" "}
                           <span style={{ textTransform: "capitalize", color: "var(--accent-cyan)" }}>
                             {alert.alert_type.replace("_", " ")}
@@ -443,7 +444,7 @@ export const Overview: React.FC<OverviewProps> = ({
                       <button
                         onClick={() => onResolveAlert(alert.id)}
                         className="btn btn-secondary btn-sm"
-                        style={{ fontSize: "0.6875rem", padding: "4px 8px" }}
+                        style={{ fontSize: "0.75rem", padding: "4px 10px", flexShrink: 0 }}
                       >
                         Resolve
                       </button>
